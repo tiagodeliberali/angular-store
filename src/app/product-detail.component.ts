@@ -1,25 +1,33 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Params }   from '@angular/router';
+import { Location }                 from '@angular/common';
 
-import { Product } from './product';
+import { Product }        from './product';
+import { ProductService } from './product.service';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'product-detail',
-  template: `
-  <div *ngIf="product">
-    <h2>{{product.name}} details!</h2>
-    <div><label>id: </label>{{product.id}}</div>
-    <div>
-        <label>name: </label>
-        <input [(ngModel)]="product.name" placeholder="name"/>
-    </div>
-    <div>
-        <label>price: </label>
-        <input [(ngModel)]="product.price" placeholder="price"/>
-    </div>
-</div>
-  `
+  templateUrl: './product-detail.component.html',
+  styleUrls: [ './product-detail.component.css' ]
 })
 
-export class ProductDetailComponent {
-    @Input() product: Product;
+export class ProductDetailComponent implements OnInit {
+  @Input() product: Product;
+
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private location: Location
+  ) { }
+
+  ngOnInit(): void {
+    this.route.params
+      .switchMap((params: Params) => this.productService.getProduct(+params['id']))
+      .subscribe(product => this.product = product);
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
 }

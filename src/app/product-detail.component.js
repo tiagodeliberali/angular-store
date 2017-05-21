@@ -9,10 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
+var common_1 = require("@angular/common");
 var product_1 = require("./product");
+var product_service_1 = require("./product.service");
+require("rxjs/add/operator/switchMap");
 var ProductDetailComponent = (function () {
-    function ProductDetailComponent() {
+    function ProductDetailComponent(productService, route, location) {
+        this.productService = productService;
+        this.route = route;
+        this.location = location;
     }
+    ProductDetailComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params
+            .switchMap(function (params) { return _this.productService.getProduct(+params['id']); })
+            .subscribe(function (product) { return _this.product = product; });
+    };
+    ProductDetailComponent.prototype.goBack = function () {
+        this.location.back();
+    };
     return ProductDetailComponent;
 }());
 __decorate([
@@ -22,8 +38,12 @@ __decorate([
 ProductDetailComponent = __decorate([
     core_1.Component({
         selector: 'product-detail',
-        template: "\n  <div *ngIf=\"product\">\n    <h2>{{product.name}} details!</h2>\n    <div><label>id: </label>{{product.id}}</div>\n    <div>\n        <label>name: </label>\n        <input [(ngModel)]=\"product.name\" placeholder=\"name\"/>\n    </div>\n    <div>\n        <label>price: </label>\n        <input [(ngModel)]=\"product.price\" placeholder=\"price\"/>\n    </div>\n</div>\n  "
-    })
+        templateUrl: './product-detail.component.html',
+        styleUrls: ['./product-detail.component.css']
+    }),
+    __metadata("design:paramtypes", [product_service_1.ProductService,
+        router_1.ActivatedRoute,
+        common_1.Location])
 ], ProductDetailComponent);
 exports.ProductDetailComponent = ProductDetailComponent;
 //# sourceMappingURL=product-detail.component.js.map

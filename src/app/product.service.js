@@ -13,6 +13,9 @@ var ProductService = (function () {
     ProductService.prototype.getProducts = function () {
         return Promise.resolve(mock_products_1.PRODUCTS);
     };
+    ProductService.prototype.getProduct = function (id) {
+        return Promise.resolve(mock_products_1.PRODUCTS.find(function (product) { return product.id === id; }));
+    };
     return ProductService;
 }());
 ProductService = __decorate([

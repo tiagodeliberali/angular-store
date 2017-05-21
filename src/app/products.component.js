@@ -9,10 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
 var product_service_1 = require("./product.service");
 var ProductsComponent = (function () {
-    function ProductsComponent(productService) {
+    function ProductsComponent(productService, router) {
         this.productService = productService;
+        this.router = router;
     }
     ProductsComponent.prototype.ngOnInit = function () {
         this.getProducts();
@@ -26,14 +28,19 @@ var ProductsComponent = (function () {
     ProductsComponent.prototype.onSelect = function (product) {
         this.selectedProduct = product;
     };
+    ProductsComponent.prototype.gotoDetail = function () {
+        this.router.navigate(['/detail', this.selectedProduct.id]);
+    };
     return ProductsComponent;
 }());
 ProductsComponent = __decorate([
     core_1.Component({
         selector: 'my-products',
-        template: "\n    <h2>Lista de Produtos</h2>\n    <ul class=\"productList\">\n      <li *ngFor=\"let product of productList\" \n        (click)=\"onSelect(product)\" \n        [class.selected]=\"product === selectedProduct\">\n        <span class=\"badge\">{{product.id}}</span> {{product.name}}: {{product.price}}\n      </li>\n    </ul>\n    <product-detail [product]=\"selectedProduct\"></product-detail>\n  "
+        templateUrl: './products.component.html',
+        styleUrls: ['./products.component.css']
     }),
-    __metadata("design:paramtypes", [product_service_1.ProductService])
+    __metadata("design:paramtypes", [product_service_1.ProductService,
+        router_1.Router])
 ], ProductsComponent);
 exports.ProductsComponent = ProductsComponent;
 //# sourceMappingURL=products.component.js.map
