@@ -31,7 +31,8 @@ var ProductDetailComponent = (function () {
     };
     ProductDetailComponent.prototype.save = function () {
         var _this = this;
-        this.productService.update(this.product)
+        this.productService
+            .update(this.product)
             .then(function () { return _this.goBack(); });
     };
     return ProductDetailComponent;
