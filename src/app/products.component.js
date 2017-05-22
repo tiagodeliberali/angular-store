@@ -17,6 +17,9 @@ var ProductsComponent = (function () {
         this.router = router;
     }
     ProductsComponent.prototype.ngOnInit = function () {
+        this.loadProductList();
+    };
+    ProductsComponent.prototype.loadProductList = function () {
         var _this = this;
         this.productService
             .getProducts()
@@ -38,6 +41,17 @@ var ProductsComponent = (function () {
             .then(function (product) {
             _this.productList.push(product);
             _this.selectedProduct = null;
+        });
+    };
+    ProductsComponent.prototype.delete = function (product) {
+        var _this = this;
+        this.productService
+            .delete(product.id)
+            .then(function () {
+            _this.productList = _this.productList.filter(function (x) { return x.id !== product.id; });
+            if (_this.selectedProduct === product) {
+                _this.selectedProduct = null;
+            }
         });
     };
     return ProductsComponent;

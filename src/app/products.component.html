@@ -2,6 +2,7 @@
 <ul class="productList">
   <li *ngFor="let product of productList" (click)="onSelect(product)" [class.selected]="product === selectedProduct">
     <span class="badge">{{product.id}}</span> {{product.name}}: {{product.price}}
+    <button class="delete" (click)="delete(product); $event.stopPropagation()">x</button>
   </li>
 </ul>
 <div *ngIf="selectedProduct">

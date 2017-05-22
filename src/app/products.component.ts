@@ -20,6 +20,10 @@ export class ProductsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadProductList();
+  }
+
+  loadProductList(): void {
     this.productService
       .getProducts()
       .then(products => this.productList = products);
@@ -42,6 +46,17 @@ export class ProductsComponent implements OnInit {
       .then(product => {
         this.productList.push(product);
         this.selectedProduct = null;
+      });
+  }
+
+  delete(product: Product): void {
+    this.productService
+      .delete(product.id)
+      .then(() => {
+        this.productList = this.productList.filter(x => x.id !== product.id);
+        if (this.selectedProduct === product) {
+          this.selectedProduct = null;
+        }
       });
   }
 }

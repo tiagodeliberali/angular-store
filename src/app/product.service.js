@@ -49,6 +49,14 @@ var ProductService = (function () {
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
+    ProductService.prototype.delete = function (id) {
+        var url = this.productsUrl + "/" + id;
+        return this.http
+            .delete(url, { headers: this.headers })
+            .toPromise()
+            .then(function () { return null; })
+            .catch(this.handleError);
+    };
     ProductService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
