@@ -8,6 +8,7 @@ import { Product } from './product';
 @Injectable()
 export class ProductService {
   private productsUrl = 'api/products';  // URL to web api
+  private headers = new Headers({'Content-Type': 'application/json'});
 
   constructor(private http: Http) { }
 
@@ -24,6 +25,28 @@ export class ProductService {
     return this.http.get(url)
       .toPromise()
       .then(response => response.json().data as Product)
+      .catch(this.handleError);
+  }
+
+  update(product: Product): Promise<Product> {
+    const url = `${this.productsUrl}/${product.id}`;
+
+    return this.http
+      .put(url, JSON.stringify(product), { headers: this.headers })
+      .toPromise()
+      .then(() => product)
+      .catch(this.handleError);
+  }
+
+  create(name: string, price: number): Promise<Product> {
+    let product = new Product();
+    product.name = name;
+    product.price = price;
+
+    return this.http
+      .post(this.productsUrl, JSON.stringify(product), { headers: this.headers })
+      .toPromise()
+      .then(res => res.json().data as Product)
       .catch(this.handleError);
   }
 

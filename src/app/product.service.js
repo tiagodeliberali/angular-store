@@ -11,10 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/toPromise");
+var product_1 = require("./product");
 var ProductService = (function () {
     function ProductService(http) {
         this.http = http;
         this.productsUrl = 'api/products'; // URL to web api
+        this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
     }
     ProductService.prototype.getProducts = function () {
         return this.http.get(this.productsUrl)
@@ -27,6 +29,24 @@ var ProductService = (function () {
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json().data; })
+            .catch(this.handleError);
+    };
+    ProductService.prototype.update = function (product) {
+        var url = this.productsUrl + "/" + product.id;
+        return this.http
+            .put(url, JSON.stringify(product), { headers: this.headers })
+            .toPromise()
+            .then(function () { return product; })
+            .catch(this.handleError);
+    };
+    ProductService.prototype.create = function (name, price) {
+        var product = new product_1.Product();
+        product.name = name;
+        product.price = price;
+        return this.http
+            .post(this.productsUrl, JSON.stringify(product), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
     ProductService.prototype.handleError = function (error) {

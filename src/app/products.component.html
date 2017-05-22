@@ -10,3 +10,10 @@
   </h2>
   <button (click)="gotoDetail()">View Details</button>
 </div>
+<div>
+  <label>Product name:</label> <input #productName />
+  <label>Product price:</label> <input #productPrice />
+  <button (click)="add(productName.value, productPrice.value); productName.value=''; productPrice.value=''">
+    Add
+  </button>
+</div>
